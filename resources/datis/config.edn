@@ -1,0 +1,18 @@
+{:duct.profile/base
+ {:duct.core/project-ns datis
+
+  :duct.router/ataraxy
+  {:routes {[:get "/example"] [:datis.handler/example]}}
+
+  :datis.handler/example
+  {:db #ig/ref :duct.database/sql}}
+
+ :duct.profile/dev   #duct/include "dev"
+ :duct.profile/local #duct/include "local"
+ :duct.profile/prod  {}
+
+ :duct.module/logging {}
+ :duct.module.web/api
+ {}
+ :duct.module/sql
+ {}}
