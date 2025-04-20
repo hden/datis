@@ -11,7 +11,7 @@
                  [duct/module.sql "0.6.1"]
                  [duct/module.web "0.7.3"]
                  [hden/cloud-pubsub-batch-publisher "1.1.0-SNAPSHOT"]
-                 [hden/debezium-embedded "3.0.8-SNAPSHOT"]
+                 [hden/debezium-embedded "3.1.0-SNAPSHOT"]
                  [io.debezium/debezium-connector-postgres "3.1.0.Final"]
                  [org.xerial/sqlite-jdbc "3.34.0"]]
   :plugins [[duct/lein-duct "0.12.3"]]

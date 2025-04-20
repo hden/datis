@@ -13,6 +13,7 @@
           engine (ig/init-key :datis.service.debezium/core arg-map)
           records (promesa/await events)]
       (is engine)
+      (is (= {:running true} (debezium/status engine)))
       (is (vector? records))
       (is (every? #(= #{:offset :value} (set (keys %)))
                   records)))))

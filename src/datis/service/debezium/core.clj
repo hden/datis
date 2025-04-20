@@ -18,23 +18,39 @@
    :offset.flush.interval.ms "0"
    :converter.schemas.enable "false"})
 
-(defmethod ig/init-key :datis.service.debezium/core [_ {:keys [config handler logger]
-                                                        :or {handler identity}}]
-  (let [engine (debezium/create-engine {:config (merge default-config config)
-                                        :consumer handler})
-        executor (Executors/newSingleThreadExecutor)]
+(defprotocol Engine
+  (start! [this])
+  (stop! [this])
+  (status [this]))
+
+(defrecord Boundary [engine executor logger]
+  Engine
+  (start! [this]
     (.execute executor engine)
     (when logger
       (log logger :info "Debezium engine started"))
-    {:engine engine :executor executor :logger logger}))
+    this)
+  (stop! [_]
+    (try
+      (.shutdown executor)
+      (while (not (.awaitTermination executor 5 TimeUnit/SECONDS))
+        (when logger
+          (log logger :info "Waiting another 5 seconds for the embedded engine to shut down...")))
+      (catch InterruptedException e
+        (when logger
+          (log logger :error "Error stopping Debezium engine" e))
+        (throw e))))
+  (status [_]
+    {:running (debezium/running? engine)}))
 
-(defmethod ig/halt-key! :datis.service.debezium/core [_ {:keys [executor logger]}]
-  (try
-    (.shutdown executor)
-    (while (not (.awaitTermination executor 5 TimeUnit/SECONDS))
-      (when logger
-        (log logger :info "Waiting another 5 seconds for the embedded engine to shut down...")))
-    (catch InterruptedException e
-      (when logger
-        (log logger :error "Error stopping Debezium engine" e))
-      (throw e))))
+(defmethod ig/init-key :datis.service.debezium/core [_ {:keys [config handler logger]
+                                                        :or {handler identity}}]
+  (let [executor (Executors/newSingleThreadExecutor)
+        engine (->Boundary (debezium/create-engine {:config (merge default-config config)
+                                                    :consumer handler})
+                           executor
+                           logger)]
+    (start! engine)))
+
+(defmethod ig/halt-key! :datis.service.debezium/core [_ engine]
+  (stop! engine))
