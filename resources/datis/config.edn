@@ -1,11 +1,32 @@
 {:duct.profile/base
  {:duct.core/project-ns datis
 
-  :duct.router/ataraxy
-  {:routes {[:get "/example"] [:datis.handler/example]}}
+  :datis.service.debezium/engine
+  {:config {:name #duct/env ["DATIS_DEBEZIUM_NAME" :or "datis"]
+            :database.hostname #duct/env ["DATIS_DB_HOST" :or "localhost"]
+            :database.port #duct/env ["DATIS_DB_PORT" Int :or 5432]
+            :database.user #duct/env ["DATIS_DB_USER" :or "postgres"]
+            :database.password #duct/env ["DATIS_DB_PASSWORD" :or "postgres"]
+            :database.dbname #duct/env ["DATIS_DB_NAME" :or "postgres"]
+            :snapshot.mode #duct/env ["DATIS_SNAPSHOT_MODE" :or "no_data"]
+            ;; Note: Adjust batch size if Pub/Sub message size limit (10MB) is exceeded
+            :batch.size #duct/env ["DATIS_BATCH_SIZE" Int :or 1000]
+            :table.include.list #duct/env ["DATIS_TABLE_INCLUDE_LIST" :or ".*"]}
 
-  :datis.handler/example
-  {:db #ig/ref :duct.database/sql}}
+   :handler #ig/ref :datis.handler.cdc.core/event-handler
+   :logger #ig/ref :duct.logger/timbre}
+
+  :datis.handler.cdc.core/event-handler
+  {:pubsub #ig/ref :datis.boundary.pubsub.core/publisher}
+
+  :datis.boundary.pubsub.core/publisher
+  {:topic #duct/env ["DATIS_PUBSUB_TOPIC" :or "datis"]}
+
+  :duct.router/ataraxy
+  {:routes {[:get "/health"] [:datis.handler.api/health]}}
+
+  :datis.handler.api/health
+  {:engine #ig/ref :datis.service.debezium/engine}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"

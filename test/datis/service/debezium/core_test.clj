@@ -10,7 +10,7 @@
           arg-map {:config {:schema.include.list "inventory"}
                    :handler (fn [records]
                               (promesa/resolve! events records))}
-          engine (ig/init-key :datis.service.debezium/core arg-map)
+          engine (ig/init-key :datis.service.debezium/engine arg-map)
           records (promesa/await events)]
       (is engine)
       (is (= {:running true} (debezium/status engine)))

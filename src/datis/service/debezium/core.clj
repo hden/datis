@@ -43,8 +43,8 @@
   (status [_]
     {:running (debezium/running? engine)}))
 
-(defmethod ig/init-key :datis.service.debezium/core [_ {:keys [config handler logger]
-                                                        :or {handler identity}}]
+(defmethod ig/init-key :datis.service.debezium/engine [_ {:keys [config handler logger]
+                                                          :or {handler identity}}]
   (let [executor (Executors/newSingleThreadExecutor)
         engine (->Boundary (debezium/create-engine {:config (merge default-config config)
                                                     :consumer handler})
@@ -52,5 +52,5 @@
                            logger)]
     (start! engine)))
 
-(defmethod ig/halt-key! :datis.service.debezium/core [_ engine]
+(defmethod ig/halt-key! :datis.service.debezium/engine [_ engine]
   (stop! engine))
