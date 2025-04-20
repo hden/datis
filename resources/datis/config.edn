@@ -20,7 +20,7 @@
   {:pubsub #ig/ref :datis.boundary.pubsub.core/publisher}
 
   :datis.boundary.pubsub.core/publisher
-  {:topic #duct/env ["DATIS_PUBSUB_TOPIC" :or "datis"]}
+  {:topic #duct/env ["DATIS_PUBSUB_TOPIC"]}
 
   :duct.router/ataraxy
   {:routes {[:get "/health"] [:datis.handler.api/health]}}

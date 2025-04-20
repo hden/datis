@@ -1,7 +1,8 @@
 (ns datis.boundary.pubsub.core
   (:require [integrant.core :as ig]
             [clojure.data.json :as json]
-            [cloud-pubsub-batch-publisher.core :as pubsub]))
+            [cloud-pubsub-batch-publisher.core :as pubsub]
+            [cloud-pubsub-batch-publisher.emulator :as emulator]))
 
 (defn- event->metadata [event]
   (let [metadata (merge (select-keys event [:op])
@@ -22,7 +23,11 @@
   (pubsub/publish! publisher (map event->message events)))
 
 (defmethod ig/init-key ::publisher [_ {:keys [topic]}]
-  (pubsub/publisher topic))
+  (if (System/getenv "PUBSUB_EMULATOR_HOST")
+    (let [context (emulator/context {})]
+      (emulator/create-topic! topic context)
+      (pubsub/publisher topic context))
+    (pubsub/publisher topic)))
 
 (defmethod ig/halt-key! ::publisher [_ publisher]
   (pubsub/shutdown! publisher))
