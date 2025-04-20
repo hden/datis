@@ -18,16 +18,11 @@
      :metadata metadata
      :ordering-key name}))
 
-(defprotocol Publisher
-  (publish! [this arg-map]))
-
-(defrecord Boundary [publisher]
-  Publisher
-  (publish! [_ {:keys [events]}]
-    (pubsub/publish! publisher (map event->message events))))
+(defn publish! [publisher {:keys [events]}]
+  (pubsub/publish! publisher (map event->message events)))
 
 (defmethod ig/init-key ::publisher [_ {:keys [topic]}]
-  (->Boundary (pubsub/publisher topic)))
+  (pubsub/publisher topic))
 
-(defmethod ig/halt-key! ::publisher [_ {:keys [publisher]}]
+(defmethod ig/halt-key! ::publisher [_ publisher]
   (pubsub/shutdown! publisher))

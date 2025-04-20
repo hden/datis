@@ -1,12 +1,12 @@
 (ns datis.handler.cdc.core-test
   (:require [clojure.test :refer :all]
             [integrant.core :as ig]
-            [datis.boundary.pubsub.core :as pubsub]
+            [cloud-pubsub-batch-publisher.core :as pubsub]
             [datis.handler.cdc.core :as cdc]))
 
 (defn mock-publisher [spy]
-  (reify pubsub/Publisher
-    (publish! [_ arg-map]
+  (reify pubsub/PublisherImpls
+    (publish-impl! [_ arg-map]
       (reset! spy arg-map))))
 
 (deftest cdc-handler-test
@@ -14,9 +14,18 @@
     (let [spy (atom [])
           arg-map {:publisher (mock-publisher spy)}
           handler (ig/init-key :datis.handler.cdc.core/event-handler arg-map)
-          data [{:value {:id 1 :name "test"}}
-                {:value {:id 2 :name "test2"}}]]
+          data [{:value {:op :insert
+                         :source {:name "test-source"}
+                         :after {:id 1 :name "test"}}}
+                {:value {:op :update
+                         :source {:name "test-source"}
+                         :after {:id 2 :name "test2"}}}]]
       (is (fn? handler))
       (handler data)
-      (is (= {:events (map :value data)}
+      (is (= [{:message "{\"op\":\"insert\",\"source\":{\"name\":\"test-source\"},\"after\":{\"id\":1,\"name\":\"test\"}}"
+               :metadata {"op" ":insert" "name" "test-source" "id" "1"}
+               :ordering-key "test-source"}
+              {:message "{\"op\":\"update\",\"source\":{\"name\":\"test-source\"},\"after\":{\"id\":2,\"name\":\"test2\"}}"
+               :metadata {"op" ":update" "name" "test-source" "id" "2"}
+               :ordering-key "test-source"}]
              @spy)))))
