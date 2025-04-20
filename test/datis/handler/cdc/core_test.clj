@@ -18,5 +18,5 @@
                 {:value {:id 2 :name "test2"}}]]
       (is (fn? handler))
       (handler data)
-      (is (= (map :value data)
+      (is (= {:events (map :value data)}
              @spy)))))

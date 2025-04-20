@@ -3,12 +3,14 @@
   :url "http://example.com/FIXME"
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.12.0"]
+                 [org.clojure/data.json "2.5.1"]
                  [com.fasterxml.jackson.core/jackson-databind "2.16.2"]
                  [duct/core "0.8.0"]
                  [duct/module.ataraxy "0.3.0"]
                  [duct/module.logging "0.5.0"]
                  [duct/module.sql "0.6.1"]
                  [duct/module.web "0.7.3"]
+                 [hden/cloud-pubsub-batch-publisher "1.1.0-SNAPSHOT"]
                  [hden/debezium-embedded "3.0.8-SNAPSHOT"]
                  [io.debezium/debezium-connector-postgres "3.1.0.Final"]
                  [org.xerial/sqlite-jdbc "3.34.0"]]

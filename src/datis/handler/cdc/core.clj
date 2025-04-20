@@ -4,4 +4,4 @@
 
 (defmethod ig/init-key ::event-handler [_ {:keys [publisher]}]
   (fn [events]
-    (pubsub/publish! publisher (map :value events))))
+    (pubsub/publish! publisher {:events (map :value events)})))
