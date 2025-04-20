@@ -1,5 +1,6 @@
 (ns datis.handler.cdc.core-test
-  (:require [clojure.test :refer :all]
+  {:clj-kondo/config '{:linters {:unused-namespace {:level :off}}}}
+  (:require [clojure.test :refer [deftest is testing]]
             [integrant.core :as ig]
             [cloud-pubsub-batch-publisher.core :as pubsub]
             [datis.handler.cdc.core :as cdc]))

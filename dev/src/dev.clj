@@ -1,4 +1,7 @@
 (ns dev
+  {:clj-kondo/config '{:linters {:unused-referred-var {:level :off}
+                                 :unused-namespace {:level :off}
+                                 :refer-all {:level :off}}}}
   (:refer-clojure :exclude [test])
   (:require [clojure.repl :refer :all]
             [fipp.edn :refer [pprint]]

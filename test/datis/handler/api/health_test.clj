@@ -1,5 +1,5 @@
 (ns datis.handler.api.health-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest is testing]]
             [integrant.core :as ig]
             [ring.mock.request :as mock]
             [datis.service.debezium.core :refer [start! stop! Engine]]

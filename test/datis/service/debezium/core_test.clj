@@ -1,5 +1,5 @@
 (ns datis.service.debezium.core-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest is testing]]
             [promesa.core :as promesa]
             [integrant.core :as ig]
             [datis.service.debezium.core :as debezium]))
