@@ -17,10 +17,12 @@
    :logger #ig/ref :duct.logger/timbre}
 
   :datis.handler.cdc.core/event-handler
-  {:pubsub #ig/ref :datis.boundary.pubsub.core/publisher}
+  {:publisher #ig/ref :datis.boundary.pubsub.core/publisher
+   :logger #ig/ref :duct.logger/timbre}
 
   :datis.boundary.pubsub.core/publisher
-  {:topic #duct/env ["DATIS_PUBSUB_TOPIC"]}
+  {:topic #duct/env ["DATIS_PUBSUB_TOPIC"]
+   :logger #ig/ref :duct.logger/timbre}
 
   :duct.router/ataraxy
   {:routes {[:get "/health"] [:datis.handler.api/health]}}

@@ -32,6 +32,7 @@
     this)
   (stop! [_]
     (try
+      (.close engine)
       (.shutdown executor)
       (while (not (.awaitTermination executor 5 TimeUnit/SECONDS))
         (when logger
@@ -47,7 +48,10 @@
                                                           :or {handler identity}}]
   (let [executor (Executors/newSingleThreadExecutor)
         engine (->Boundary (debezium/create-engine {:config (merge default-config config)
-                                                    :consumer handler})
+                                                    :consumer handler
+                                                    :connector-callback
+                                                    (fn [event]
+                                                      (log logger :info "Debezium event:" event))})
                            executor
                            logger)]
     (start! engine)))

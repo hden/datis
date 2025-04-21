@@ -27,7 +27,7 @@
    :profiles/dev {}
    :project/dev  {:source-paths   ["dev/src"]
                   :resource-paths ["dev/resources"]
-                  :global-vars {*warn-on-reflection* true}
+                  ;; :global-vars {*warn-on-reflection* true}
                   :dependencies   [[integrant/repl "0.3.2"]
                                    [funcool/promesa "11.0.678"]
                                    [camel-snake-kebab "0.4.3"]

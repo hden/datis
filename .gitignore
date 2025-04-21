@@ -50,5 +50,15 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/macos,clojure
+
+
+## duct framework
+db/
+logs/
+
+## Linter
 .clj-kondo/cache/
+
+## Environment variables
 .env
+gcp-credentials.json
