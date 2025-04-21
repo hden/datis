@@ -9,7 +9,7 @@
                  [duct/module.ataraxy "0.3.0"]
                  [duct/module.logging "0.5.0"]
                  [duct/module.sql "0.6.1"]
-                 [duct/module.web "0.7.3"]
+                 [duct/module.web "0.7.4"]
                  [hden/cloud-pubsub-batch-publisher "1.1.2-SNAPSHOT"]
                  [hden/debezium-embedded "3.1.0-SNAPSHOT"]
                  [io.debezium/debezium-connector-postgres "3.1.0.Final"]
