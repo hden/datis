@@ -25,6 +25,30 @@ PostgreSQL → Debezium → Google Cloud Pub/Sub → Downstream Services
 3. Google Cloud Pub/Sub: Distributes events to interested services
 4. Downstream Services: Consume and process the change events
 
+### Enhanced Message Filtering
+
+One of the key features of Datis is its enhanced message filtering capability using PubSub's message attributes. Each message includes metadata such as:
+- Operation type (insert, update, delete)
+- Database name
+- Schema name
+- Table name
+- Record ID (before/after)
+
+This metadata enables powerful filtering at the PubSub subscription level, allowing you to:
+- Subscribe only to specific tables
+- Filter by operation type (e.g., only inserts)
+- Target specific records by ID
+- Combine multiple conditions using PubSub's filter expressions
+
+Example PubSub filter expressions:
+```
+attributes.table = "users" AND attributes.op = "c"  # Only new users
+attributes.schema = "public" AND attributes.op = "u"  # Only updates in public schema
+attributes.id = "123"  # Changes to specific record
+```
+
+This feature provides more flexibility than standard Debezium Server implementations, as it allows downstream services to selectively process only the events they need, reducing unnecessary processing and network traffic.
+
 ## Prerequisites
 
 - PostgreSQL 10.0 or later
