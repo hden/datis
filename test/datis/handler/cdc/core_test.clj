@@ -23,10 +23,11 @@
                          :after {:id 2 :name "test2"}}}]]
       (is (fn? handler))
       (handler data)
-      (is (= [{:message "{\"op\":\"insert\",\"source\":{\"name\":\"test-source\"},\"after\":{\"id\":1,\"name\":\"test\"}}"
-               :metadata {"op" ":insert" "name" "test-source" "id" "1"}
-               :ordering-key "test-source"}
-              {:message "{\"op\":\"update\",\"source\":{\"name\":\"test-source\"},\"after\":{\"id\":2,\"name\":\"test2\"}}"
-               :metadata {"op" ":update" "name" "test-source" "id" "2"}
-               :ordering-key "test-source"}]
+      (is (= {:messages
+              [{:message "{\"op\":\"insert\",\"source\":{\"name\":\"test-source\"},\"after\":{\"id\":1,\"name\":\"test\"}}"
+                :metadata {"op" ":insert" "name" "test-source" "id" "1"}
+                :ordering-key "test-source"}
+               {:message "{\"op\":\"update\",\"source\":{\"name\":\"test-source\"},\"after\":{\"id\":2,\"name\":\"test2\"}}"
+                :metadata {"op" ":update" "name" "test-source" "id" "2"}
+                :ordering-key "test-source"}]}
              @spy)))))

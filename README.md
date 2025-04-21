@@ -1,4 +1,4 @@
-# Datis - Change Data Capture Service
+# Datis - Change Data Capture Service [![CircleCI](https://dl.circleci.com/status-badge/img/gh/hden/datis/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/hden/datis/tree/main)
 
 Datis is a service that captures database changes from PostgreSQL and streams them to Google Cloud Pub/Sub using Debezium. This enables real-time data synchronization and event-driven architectures.
 
