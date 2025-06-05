@@ -12,7 +12,7 @@
                  [duct/module.web "0.7.3"]
                  [hden/cloud-pubsub-batch-publisher "1.1.2-SNAPSHOT"]
                  [hden/debezium-embedded "3.1.0-SNAPSHOT"]
-                 [io.debezium/debezium-connector-postgres "3.1.1.Final"]
+                 [io.debezium/debezium-connector-postgres "3.1.2.Final"]
                  [org.xerial/sqlite-jdbc "3.49.1.0"]]
   :plugins [[duct/lein-duct "0.12.3"]]
   :main ^:skip-aot datis.main
