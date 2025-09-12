@@ -28,7 +28,7 @@
    :project/dev  {:source-paths   ["dev/src"]
                   :resource-paths ["dev/resources"]
                   ;; :global-vars {*warn-on-reflection* true}
-                  :dependencies   [[integrant/repl "0.3.2"]
+                  :dependencies   [[integrant/repl "0.5.0"]
                                    [funcool/promesa "11.0.678"]
                                    [camel-snake-kebab "0.4.3"]
                                   ;;  [org.slf4j/slf4j-simple "2.0.17"]
