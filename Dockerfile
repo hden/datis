@@ -9,7 +9,7 @@ COPY . .
 RUN lein uberjar
 
 # Run stage
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:25-jre-jammy
 
 WORKDIR /app
 COPY --from=builder /app/target/uberjar/*-standalone.jar app.jar
