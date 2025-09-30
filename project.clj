@@ -33,5 +33,5 @@
                                    [camel-snake-kebab "0.4.3"]
                                   ;;  [org.slf4j/slf4j-simple "2.0.17"]
                                    [hawk "0.2.11"]
-                                   [eftest "0.5.9"]
+                                   [eftest "0.6.0"]
                                    [kerodon "0.9.1"]]}})
