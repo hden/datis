@@ -4,7 +4,7 @@
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.12.4"]
                  [org.clojure/data.json "2.5.2"]
-                 [com.fasterxml.jackson.core/jackson-databind "2.16.2"]
+                 [com.fasterxml.jackson.core/jackson-databind "2.21.2"]
                  [duct/core "0.8.0"]
                  [duct/module.ataraxy "0.3.0"]
                  [duct/module.logging "0.5.0"]
