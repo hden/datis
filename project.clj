@@ -29,7 +29,7 @@
                   :resource-paths ["dev/resources"]
                   ;; :global-vars {*warn-on-reflection* true}
                   :dependencies   [[integrant/repl "0.5.1"]
-                                   [funcool/promesa "11.0.678"]
+                                   [funcool/promesa "12.0.0"]
                                    [camel-snake-kebab "0.4.3"]
                                   ;;  [org.slf4j/slf4j-simple "2.0.18"]
                                    [hawk "0.2.11"]
