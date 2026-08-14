@@ -62,3 +62,7 @@ logs/
 ## Environment variables
 .env
 gcp-credentials.json
+
+## Agent
+
+docs/superpowers
