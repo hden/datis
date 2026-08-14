@@ -4,7 +4,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/clojure:1.12
+      - image: cimg/clojure:1.12.5-openjdk-21.0-node
       - image: debezium/postgres:16
         environment:
           POSTGRES_USER: postgres
