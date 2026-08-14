@@ -66,3 +66,6 @@ gcp-credentials.json
 ## Agent
 
 docs/superpowers
+
+## Local Git worktrees
+.worktrees/
