@@ -4,8 +4,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/clojure:1.11
-      - image: debezium/example-postgres:3.0.0.Final
+      - image: cimg/clojure:1.12
+      - image: debezium/postgres:16
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -18,13 +18,18 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
+      - run:
+          name: Install Babashka
+          command: |
+            curl --fail --location --silent --show-error https://github.com/babashka/babashka/releases/download/v1.12.218/babashka-1.12.218-linux-amd64-static.tar.gz | tar -xz -C /tmp
+            sudo install -m 0755 /tmp/bb /usr/local/bin/bb
       # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "project.clj" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      - run: lein deps
+      - run: bb deps
       - save_cache:
           paths:
             - ~/.m2
@@ -32,4 +37,8 @@ jobs:
       - run:
           name: Wait for pubsub emulator
           command: dockerize -wait tcp://localhost:8085 -timeout 1m
-      - run: lein test
+      - run:
+          name: Wait for PostgreSQL
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: bb setup
+      - run: bb check

@@ -1,8 +1,10 @@
 (ns datis.service.debezium.core
-  (:require [debezium-embedded.core :as debezium]
-            [duct.logger :refer [log]]
-            [integrant.core :as ig])
-  (:import [java.util.concurrent Executors TimeUnit]))
+  (:require
+   [debezium-embedded.core :as debezium]
+   [duct.logger :refer [log]]
+   [integrant.core :as ig])
+  (:import
+   (java.util.concurrent Callable ExecutorService Executors Future ThreadFactory)))
 
 (def default-config
   {:name "datis"
@@ -23,36 +25,50 @@
   (stop! [this])
   (status [this]))
 
-(defrecord Boundary [engine executor logger]
+(defn- daemon-thread-factory []
+  (let [thread-number (atom 0)]
+    (reify ThreadFactory
+      (newThread [_ runnable]
+        (doto (Thread. runnable (str "datis-debezium-" (swap! thread-number inc)))
+          (.setDaemon true))))))
+
+(defn- launch! [engine executor logger]
+  (.submit ^ExecutorService executor
+           ^Callable
+           (reify Callable
+             (call [_]
+               (if-let [anomaly (debezium/start! engine {:executor executor})]
+                 (when logger
+                   (log logger :error "Debezium engine did not start:" anomaly))
+                 (when logger
+                   (log logger :info "Debezium engine started")))))))
+
+(defrecord Boundary [engine executor start-task logger]
   Engine
   (start! [this]
-    (.execute executor engine)
-    (when logger
-      (log logger :info "Debezium engine started"))
-    this)
+    (assoc this :start-task (launch! engine executor logger)))
   (stop! [_]
-    (try
-      (.close engine)
-      (.shutdown executor)
-      (while (not (.awaitTermination executor 5 TimeUnit/SECONDS))
-        (when logger
-          (log logger :info "Waiting another 5 seconds for the embedded engine to shut down...")))
-      (catch InterruptedException e
-        (when logger
-          (log logger :error "Error stopping Debezium engine" e))
-        (throw e))))
+    (when (debezium/polling? engine)
+      (when-let [anomaly (debezium/stop! engine {:timeout-ms 5000})]
+        (throw (ex-info "Unable to stop Debezium engine" anomaly))))
+    (when start-task
+      (.cancel ^Future start-task true))
+    (.shutdownNow ^ExecutorService executor))
   (status [_]
-    {:running (debezium/running? engine)}))
+    {:running (debezium/polling? engine)}))
 
 (defmethod ig/init-key :datis.service.debezium/engine [_ {:keys [config handler logger]
                                                           :or {handler identity}}]
-  (let [executor (Executors/newSingleThreadExecutor)
-        engine (->Boundary (debezium/create-engine {:config (merge default-config config)
-                                                    :consumer handler
-                                                    :connector-callback
+  (let [executor (Executors/newFixedThreadPool 2 (daemon-thread-factory))
+        engine (->Boundary (debezium/create-engine {::debezium/config (merge default-config config)
+                                                    ::debezium/consumer handler
+                                                    ::debezium/on-event
                                                     (fn [event]
-                                                      (log logger :info "Debezium event:" event))})
+                                                      (tap> event)
+                                                      (when logger
+                                                        (log logger :info "Debezium event:" event)))})
                            executor
+                           nil
                            logger)]
     (start! engine)))
 

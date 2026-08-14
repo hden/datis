@@ -1,9 +1,10 @@
 (ns datis.handler.api.health-test
-  (:require [clojure.test :refer [deftest is testing]]
-            [integrant.core :as ig]
-            [ring.mock.request :as mock]
-            [datis.service.debezium.core :refer [start! stop! Engine]]
-            [datis.handler.api.health]))
+  (:require
+   [clojure.test :refer [deftest is testing]]
+   [datis.handler.api.health]
+   [datis.service.debezium.core :refer [Engine start! stop!]]
+   [integrant.core :as ig]
+   [ring.mock.request :as mock]))
 
 (defrecord TestEngine [running]
   Engine
