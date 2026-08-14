@@ -69,3 +69,7 @@ docs/superpowers
 
 ## Local Git worktrees
 .worktrees/
+
+## Node.js tooling
+node_modules/
+.tools/

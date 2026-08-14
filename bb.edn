@@ -1,0 +1,29 @@
+{:tasks
+ {deps         {:doc  "Download JVM dependencies"
+                :task (shell "lein deps")}
+  setup        {:doc  "Install JavaScript tooling"
+                :task (do
+                        (shell "sh scripts/install-clj-kondo.sh")
+                        (shell "npm ci"))}
+  format       {:doc  "Format Clojure and EDN files"
+                :task (shell "npm run format")}
+  format-check {:doc  "Check Clojure and EDN formatting"
+                :task (shell "npm run format:check")}
+  lint         {:doc  "Lint Clojure source"
+                :task (shell ".tools/clj-kondo/clj-kondo --lint src test dev resources project.clj profiles.clj")}
+  secrets      {:doc  "Scan tracked files for credentials"
+                :task (shell "npm run secretlint")}
+  test         {:doc  "Run the Leiningen test suite"
+                :task (shell "perl -e 'alarm 90; exec @ARGV' lein test")}
+  coverage     {:doc  "Generate Cloverage and LCOV reports"
+                :task (shell "perl -e 'alarm 180; exec @ARGV' lein cloverage --lcov")}
+  crap         {:doc     "Generate a CRAP report from LCOV"
+                :depends [coverage]
+                :task    (shell "sh scripts/run-crap.sh")}
+  fast-check   {:doc     "Run fast pre-commit quality checks"
+                :depends [secrets format-check lint]}
+  check        {:doc     "Run all repository quality checks"
+                :depends [fast-check test crap]}
+  install-hooks
+  {:doc  "Install repository-managed Git hooks"
+   :task (shell "sh scripts/install-git-hooks.sh")}}}

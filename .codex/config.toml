@@ -1,0 +1,14 @@
+default_permissions = "datis"
+
+[permissions.datis]
+extends = ":workspace"
+
+[permissions.datis.filesystem.":workspace_roots"]
+".env" = "deny"
+"**/.env" = "deny"
+"**/*credential*.json" = "deny"
+"**/*credentials*.json" = "deny"
+"**/*service-account*.json" = "deny"
+"**/*service_account*.json" = "deny"
+"**/*.pem" = "deny"
+"**/*.key" = "deny"
