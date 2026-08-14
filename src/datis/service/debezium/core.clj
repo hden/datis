@@ -4,7 +4,6 @@
    [duct.logger :refer [log]]
    [integrant.core :as ig])
   (:import
-   (java.io Closeable)
    (java.util.concurrent Callable ExecutorService Executors Future ThreadFactory)))
 
 (def default-config
@@ -50,8 +49,8 @@
     (assoc this :start-task (launch! engine executor logger)))
   (stop! [_]
     (try
-      (when (debezium/polling? engine)
-        (.close ^Closeable engine))
+      (when-let [anomaly (debezium/stop! engine {:timeout-ms 5000})]
+        (throw (ex-info "Unable to stop Debezium engine" anomaly)))
       (finally
         (when start-task
           (.cancel ^Future start-task true))
