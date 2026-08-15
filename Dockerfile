@@ -1,18 +1,10 @@
-# Build stage
-FROM clojure:temurin-21-lein-jammy AS builder
+FROM clojure:temurin-21-tools-deps-jammy
 
 WORKDIR /app
-COPY project.clj .
-RUN lein deps
+COPY deps.edn .
+RUN clojure -P -M:duct
 
 COPY . .
-RUN lein uberjar
-
-# Run stage
-FROM eclipse-temurin:25.0.3_9-jre-jammy
-
-WORKDIR /app
-COPY --from=builder /app/target/uberjar/*-standalone.jar app.jar
 
 EXPOSE 3000
-CMD ["java", "-jar", "app.jar"]
+CMD ["clojure", "-M:duct", "--main", "--keys", ":duct/daemon"]

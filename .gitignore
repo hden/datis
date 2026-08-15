@@ -11,10 +11,6 @@ pom.xml.asc
 /classes/
 /target/
 /checkouts/
-.lein-deps-sum
-.lein-repl-history
-.lein-plugins/
-.lein-failures
 .nrepl-port
 .cpcache/
 .clj-kondo/.cache/
@@ -52,8 +48,7 @@ Temporary Items
 # End of https://www.gitignore.io/api/macos,clojure
 
 
-## duct framework
-db/
+## Duct framework
 logs/
 
 ## Linter

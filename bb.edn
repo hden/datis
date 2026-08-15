@@ -1,6 +1,6 @@
 {:tasks
  {deps         {:doc  "Download JVM dependencies"
-                :task (shell "lein deps")}
+                :task (shell "clojure -P -M:duct:test:coverage")}
   setup        {:doc  "Install JavaScript tooling"
                 :task (do
                         (shell "sh scripts/install-clj-kondo.sh")
@@ -10,13 +10,13 @@
   format-check {:doc  "Check Clojure and EDN formatting"
                 :task (shell "npm run format:check")}
   lint         {:doc  "Lint Clojure source"
-                :task (shell ".tools/clj-kondo/clj-kondo --lint src test dev resources project.clj profiles.clj")}
+                :task (shell ".tools/clj-kondo/clj-kondo --lint src test deps.edn duct.edn bb.edn")}
   secrets      {:doc  "Scan tracked files for credentials"
                 :task (shell "npm run secretlint")}
-  test         {:doc  "Run the Leiningen test suite"
-                :task (shell "perl -e 'alarm 90; exec @ARGV' lein test")}
+  test         {:doc  "Run the Duct test suite"
+                :task (shell "perl -e 'alarm 90; exec @ARGV' clojure -M:duct:test --test")}
   coverage     {:doc  "Generate Cloverage and LCOV reports"
-                :task (shell "perl -e 'alarm 180; exec @ARGV' lein cloverage --lcov")}
+                :task (shell "perl -e 'alarm 180; exec @ARGV' clojure -M:test:coverage -m cloverage.coverage -p src -s test --lcov")}
   crap         {:doc     "Generate a CRAP report from LCOV"
                 :depends [coverage]
                 :task    (shell "sh scripts/run-crap.sh")}

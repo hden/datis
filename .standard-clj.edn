@@ -1,8 +1,6 @@
-{:include ["dev/**/*.clj"
-           "dev/**/*.edn"
-           "project.clj"
-           "profiles.clj"
-           "resources/**/*.edn"
+{:include ["bb.edn"
+           "deps.edn"
+           "duct.edn"
            "src/**/*.clj"
            "src/**/*.edn"
            "test/**/*.clj"]}

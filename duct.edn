@@ -1,0 +1,43 @@
+{:vars
+ {debezium-name       {:env DATIS_DEBEZIUM_NAME, :type :str, :default "datis"}
+  database-host       {:env DATIS_DB_HOST, :type :str, :default "localhost"}
+  database-port       {:env DATIS_DB_PORT, :type :int, :default 5432}
+  database-user       {:env DATIS_DB_USER, :type :str, :default "postgres"}
+  database-password   {:env DATIS_DB_PASSWORD, :type :str, :default "postgres"}
+  database-name       {:env DATIS_DB_NAME, :type :str, :default "postgres"}
+  snapshot-mode       {:env DATIS_SNAPSHOT_MODE, :type :str, :default "no_data"}
+  ;; Adjust if Pub/Sub messages exceed the 10 MB size limit.
+  batch-size          {:env DATIS_BATCH_SIZE, :type :int, :default 1000}
+  table-include-list  {:env DATIS_TABLE_INCLUDE_LIST, :type :str, :default ".*"}
+  pubsub-topic        {:env DATIS_PUBSUB_TOPIC, :type :str}}
+
+ :system
+ {:datis.service.debezium/engine
+  {:config {:name               #ig/var debezium-name
+            :database.hostname  #ig/var database-host
+            :database.port      #ig/var database-port
+            :database.user      #ig/var database-user
+            :database.password  #ig/var database-password
+            :database.dbname    #ig/var database-name
+            :snapshot.mode      #ig/var snapshot-mode
+            :batch.size         #ig/var batch-size
+            :table.include.list #ig/var table-include-list}
+   :handler #ig/ref :datis.handler.cdc.core/event-handler
+   :logger  #ig/ref :duct/logger}
+
+  :datis.handler.cdc.core/event-handler
+  {:publisher #ig/ref :datis.boundary.pubsub.core/publisher
+   :logger    #ig/ref :duct/logger}
+
+  :datis.boundary.pubsub.core/publisher
+  {:topic  #ig/var pubsub-topic
+   :logger #ig/ref :duct/logger}
+
+  :datis.handler.api/health
+  {:engine #ig/ref :datis.service.debezium/engine}
+
+  :duct.module/logging {}
+
+  :duct.module/web
+  {:features #{:api}
+   :routes [["/health" {:get :datis.handler.api/health}]]}}}

@@ -1,0 +1,23 @@
+{:paths ["src"]
+
+ :deps
+ {org.clojure/clojure                         {:mvn/version "1.12.5"}
+  org.clojure/data.json                       {:mvn/version "2.5.2"}
+  com.fasterxml.jackson.core/jackson-databind {:mvn/version "2.22.1"}
+  org.duct-framework/main                     {:mvn/version "0.4.7"}
+  org.duct-framework/module.logging           {:mvn/version "0.6.6"}
+  org.duct-framework/module.web               {:mvn/version "0.13.4"}
+  hden/cloud-pubsub-batch-publisher           {:mvn/version "1.1.2-SNAPSHOT"}
+  hden/debezium-embedded                      {:mvn/version "4.0.0-SNAPSHOT"
+                                               :exclusions [org.eclipse.jetty.ee10/jetty-ee10-servlet
+                                                            org.eclipse.jetty.ee10/jetty-ee10-servlets
+                                                            org.eclipse.jetty/jetty-client]}
+  io.debezium/debezium-connector-postgres     {:mvn/version "3.6.1.Final"}}
+
+ :aliases
+ {:duct {:main-opts ["-m" "duct.main"]}
+
+  :test {:extra-paths ["test"]
+         :extra-deps {ring/ring-mock {:mvn/version "0.6.2"}}}
+
+  :coverage {:extra-deps {cloverage/cloverage {:mvn/version "1.2.4"}}}}}
