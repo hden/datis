@@ -1,12 +1,14 @@
 services:
   postgres:
-    image: debezium/example-postgres:3.0.0.Final
+    image: debezium/postgres:16
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+    volumes:
+      - ./test/fixtures/postgres/init.sql:/docker-entrypoint-initdb.d/001-inventory.sql:ro
   pubsub-emulator:
     image: google/cloud-sdk:latest
     command: [gcloud, beta, emulators, pubsub, start, '--host-port=0.0.0.0:8085']

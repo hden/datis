@@ -1,0 +1,17 @@
+{
+  "name": "datis-tooling",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@chrisoakman/standard-clojure-style": "0.29.0",
+    "@secretlint/secretlint-rule-preset-recommend": "13.0.4",
+    "secretlint": "13.0.4"
+  },
+  "scripts": {
+    "format": "standard-clj fix",
+    "format:check": "standard-clj check",
+    "secretlint": "secretlint \"**/*\""
+  }
+}

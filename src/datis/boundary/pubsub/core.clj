@@ -1,9 +1,10 @@
 (ns datis.boundary.pubsub.core
-  (:require [integrant.core :as ig]
-            [clojure.data.json :as json]
-            [duct.logger :refer [log]]
-            [cloud-pubsub-batch-publisher.core :as pubsub]
-            [cloud-pubsub-batch-publisher.emulator :as emulator]))
+  (:require
+   [clojure.data.json :as json]
+   [cloud-pubsub-batch-publisher.core :as pubsub]
+   [cloud-pubsub-batch-publisher.emulator :as emulator]
+   [duct.logger :refer [log]]
+   [integrant.core :as ig]))
 
 (defn- event->metadata [event]
   (let [metadata (merge (select-keys event [:op])

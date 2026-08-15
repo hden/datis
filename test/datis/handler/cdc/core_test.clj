@@ -1,9 +1,10 @@
 (ns datis.handler.cdc.core-test
   {:clj-kondo/config '{:linters {:unused-namespace {:level :off}}}}
-  (:require [clojure.test :refer [deftest is testing]]
-            [integrant.core :as ig]
-            [cloud-pubsub-batch-publisher.core :as pubsub]
-            [datis.handler.cdc.core :as cdc]))
+  (:require
+   [clojure.test :refer [deftest is testing]]
+   [cloud-pubsub-batch-publisher.core :as pubsub]
+   [datis.handler.cdc.core :as cdc]
+   [integrant.core :as ig]))
 
 (defn mock-publisher [spy]
   (reify pubsub/PublisherImpls

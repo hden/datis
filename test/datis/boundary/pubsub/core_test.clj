@@ -1,8 +1,9 @@
 (ns datis.boundary.pubsub.core-test
-  (:require [clojure.test :refer [deftest is use-fixtures testing]]
-            [cloud-pubsub-batch-publisher.core :refer [publisher]]
-            [cloud-pubsub-batch-publisher.emulator :as emulator]
-            [datis.boundary.pubsub.core :as pubsub]))
+  (:require
+   [clojure.test :refer [deftest is testing use-fixtures]]
+   [cloud-pubsub-batch-publisher.core :refer [publisher]]
+   [cloud-pubsub-batch-publisher.emulator :as emulator]
+   [datis.boundary.pubsub.core :as pubsub]))
 
 (def ^:const topic "projects/test-project/topics/test-topic")
 (def context (emulator/context {}))

@@ -1,6 +1,7 @@
 (ns datis.handler.cdc.core
-  (:require [integrant.core :as ig]
-            [datis.boundary.pubsub.core :as pubsub]))
+  (:require
+   [datis.boundary.pubsub.core :as pubsub]
+   [integrant.core :as ig]))
 
 (defmethod ig/init-key ::event-handler [_ {:keys [publisher logger]}]
   (fn [events]

@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "standard-clj": {
+      "source": "hden/skills",
+      "sourceType": "github",
+      "skillPath": "skills/standard-clj/SKILL.md",
+      "computedHash": "c247bf027b3c45011879adcb82dd0b6638aa76e42ea2cab3cb3f6bff596b3586"
+    }
+  }
+}
