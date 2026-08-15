@@ -19,14 +19,17 @@
 
 (deftest health-test
   (testing "healthcheck endpoint"
-    (let [spy (atom false)
-          engine (TestEngine. spy)
+    (let [running (atom false)
+          engine (TestEngine. running)
           handler (ig/init-key :datis.handler.api/health {:engine engine})]
-      (is (= [:ataraxy.response/internal-server-error {:running false}]
+      (is (= {:status 500
+              :body   {:running false}}
              (handler (mock/request :get "/health"))))
       (start! engine)
-      (is (= [:ataraxy.response/ok {:running true}]
+      (is (= {:status 200
+              :body   {:running true}}
              (handler (mock/request :get "/health"))))
       (stop! engine)
-      (is (= [:ataraxy.response/internal-server-error {:running false}]
+      (is (= {:status 500
+              :body   {:running false}}
              (handler (mock/request :get "/health")))))))

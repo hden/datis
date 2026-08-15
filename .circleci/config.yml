@@ -14,7 +14,6 @@ jobs:
         command: [gcloud, beta, emulators, pubsub, start, '--host-port=localhost:8085']
     working_directory: ~/repo
     environment:
-      LEIN_ROOT: "true"
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
@@ -26,14 +25,14 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "project.clj" }}
+          - v2-dependencies-{{ checksum "deps.edn" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - v2-dependencies-
       - run: bb deps
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies-{{ checksum "project.clj" }}
+          key: v2-dependencies-{{ checksum "deps.edn" }}
       - run:
           name: Wait for pubsub emulator
           command: dockerize -wait tcp://localhost:8085 -timeout 1m

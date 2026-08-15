@@ -54,7 +54,7 @@ This feature provides more flexibility than standard Debezium Server implementat
 - PostgreSQL 10.0 or later
 - Google Cloud Platform account with Pub/Sub enabled
 - Java 11 or later
-- Leiningen (Clojure build tool)
+- Clojure CLI
 
 ## Configuration
 
@@ -76,10 +76,10 @@ This feature provides more flexibility than standard Debezium Server implementat
 
 ### Setup
 
-When you first clone this repository, run:
+Download the project dependencies:
 
 ```sh
-lein duct setup
+clojure -P -M:duct:test
 ```
 
 ### Environment
@@ -87,20 +87,13 @@ lein duct setup
 Start a REPL:
 
 ```sh
-lein repl
-```
-
-Load the development environment:
-
-```clojure
-user=> (dev)
-:loaded
+clojure -M:duct --repl
 ```
 
 Start the system:
 
 ```clojure
-dev=> (go)
+user=> (go)
 :duct.server.http.jetty/starting-server {:port 3000}
 :initiated
 ```
@@ -110,24 +103,17 @@ The service will be available at http://localhost:3000.
 To reload changes:
 
 ```clojure
-dev=> (reset)
+user=> (reset)
 :reloading (...)
 :resumed
 ```
 
 ### Testing
 
-Run tests through the REPL:
-
-```clojure
-dev=> (test)
-...
-```
-
-Or using Leiningen:
+Run the Duct test suite:
 
 ```sh
-lein test
+clojure -M:duct:test --test
 ```
 
 ## Monitoring

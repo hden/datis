@@ -1,0 +1,11 @@
+.git
+.gitignore
+.worktrees
+.clj-kondo
+.tools
+.cpcache
+node_modules
+target
+logs
+.env
+gcp-credentials.json
