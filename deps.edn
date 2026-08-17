@@ -4,7 +4,7 @@
  {org.clojure/clojure                         {:mvn/version "1.12.5"}
   org.clojure/data.json                       {:mvn/version "2.5.2"}
   com.fasterxml.jackson.core/jackson-databind {:mvn/version "2.22.1"}
-  org.duct-framework/main                     {:mvn/version "0.4.7"}
+  org.duct-framework/main                     {:mvn/version "0.4.8"}
   org.duct-framework/module.logging           {:mvn/version "0.6.6"}
   org.duct-framework/module.web               {:mvn/version "0.13.5"}
   hden/cloud-pubsub-batch-publisher           {:mvn/version "1.1.2-SNAPSHOT"}
